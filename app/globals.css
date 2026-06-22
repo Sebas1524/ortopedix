@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0D5BD7;
+  --color-primary-dark: #083B8A;
+  --color-accent: #6ABF4B;
+  --color-accent-dark: #4a9932;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: #4B5563;
+  background: #FFFFFF;
+  line-height: 1.6;
+}
+
+p { font-size: 1.05rem; line-height: 1.75; }
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(13, 91, 215, 0.15);
+}
+
+@keyframes whatsapp-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(106, 191, 75, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(106, 191, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(106, 191, 75, 0); }
+}
+.whatsapp-pulse { animation: whatsapp-pulse 2.5s infinite; }
+
+.gradient-text {
+  background: linear-gradient(135deg, #0D5BD7 0%, #6ABF4B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+:focus-visible { outline: 3px solid #6ABF4B; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #0D5BD7; border-radius: 4px; }
