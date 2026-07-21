@@ -33,7 +33,7 @@ export const siteConfig = {
   },
 
   // ---- CATÁLOGO ----
-  showPrices: false, // Cambiar a true para mostrar precios
+  showPrices: true, // Cambiar a true para mostrar precios
 
   // ---- SEO ----
   siteUrl: "https://ortopedix.com",
