@@ -17,7 +17,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const waMessage = `Hola, me interesa el producto: *${product.name}* de ORTOPEDIX. ¿Podría darme más información?`;
   const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(waMessage)}`;
 
-  // Color placeholder per category
+  // Color placeholder por categoría (solo se usa si no hay imagen)
   const categoryColors: Record<string, string> = {
     Movilidad: "from-blue-400 to-blue-600",
     Rehabilitación: "from-green-400 to-green-600",
@@ -32,11 +32,23 @@ export default function ProductCard({ product }: { product: Product }) {
       transition={{ type: "spring", stiffness: 300 }}
       className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
     >
-      {/* Image / placeholder */}
-      <div className={`relative h-52 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}>
-        <div className="text-white/20 text-8xl font-black select-none">
-          {product.name.charAt(0)}
-        </div>
+      {/* Imagen real o placeholder */}
+      <div className="relative h-52 overflow-hidden bg-gray-100">
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          // Placeholder solo si no hay imagen
+          <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+            <div className="text-white/20 text-8xl font-black select-none">
+              {product.name.charAt(0)}
+            </div>
+          </div>
+        )}
+        {/* Badge de categoría */}
         <div className="absolute top-3 left-3">
           <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
             {product.category}
@@ -44,7 +56,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Contenido */}
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-bold text-gray-800 text-lg leading-tight mb-2">
           {product.name}
@@ -57,7 +69,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {siteConfig.showPrices && product.price ? (
             <div className="flex items-center gap-1.5 text-[#0D5BD7]">
               <Tag size={16} />
-              <span className="font-bold text-xl">${product.price}</span>
+              <span className="font-bold text-xl">${product.price.toFixed(2)}</span>
             </div>
           ) : (
             <span className="text-gray-400 text-sm italic">Consultar precio</span>
