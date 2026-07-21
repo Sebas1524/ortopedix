@@ -1,6 +1,5 @@
 // ============================================================
 // ORTOPEDIX - CONFIGURACIÓN CENTRAL
-// Edita este archivo para cambiar información del sitio
 // ============================================================
 
 export const siteConfig = {
@@ -10,12 +9,13 @@ export const siteConfig = {
     "Productos ortopédicos y equipos de rehabilitación física de alta calidad. Atención personalizada para adultos mayores, pacientes en recuperación y profesionales de salud.",
 
   // ---- CONTACTO ----
-  whatsapp: "593999999999", // número sin + ni espacios
+  whatsapp: "593998385165",
   whatsappMessage: "Hola, me interesa recibir asesoría de ORTOPEDIX.",
   email: "info@ortopedix.com",
-  phone: "+593 99 999 9999",
-  address: "Av. Principal 123, Quito, Ecuador",
-  mapUrl:
+  phone: "+593 99 838 5165",
+  address: "Gabriel Garcia Moreno y Federico Gonzalez S1-80, 170060 Quito",
+  mapUrl: "https://maps.app.goo.gl/ywGvoNovNjYtnsgcA",
+  mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.793!2d-78.5249!3d-0.2295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMDDCsDEzJzQ2LjIiUyA3OMKwMzEnMjkuNiJX!5e0!3m2!1ses!2sec!4v1620000000000!5m2!1ses!2sec",
 
   // ---- HORARIOS ----
@@ -33,7 +33,7 @@ export const siteConfig = {
   },
 
   // ---- CATÁLOGO ----
-  showPrices: true, // Cambiar a false para ocultar precios
+  showPrices: false, // Cambiar a true para mostrar precios
 
   // ---- SEO ----
   siteUrl: "https://ortopedix.com",
@@ -43,139 +43,214 @@ export const siteConfig = {
 
 // ---- PRODUCTOS ----
 export const products = [
-  // Movilidad
   {
     id: 1,
-    name: "Silla de Ruedas Estándar",
-    category: "Movilidad",
-    subcategory: "Sillas de ruedas",
-    description:
-      "Silla de ruedas plegable con estructura de aluminio ligero. Ideal para uso diario y desplazamientos exteriores.",
-    price: 280,
-    featured: true,
-    image: "/images/products/silla-ruedas.jpg",
-  },
-  {
-    id: 2,
-    name: "Andador con Ruedas",
+    name: "Andador",
     category: "Movilidad",
     subcategory: "Andadores",
     description:
-      "Andador ergonómico con 4 ruedas, frenos de mano y asiento integrado para descanso.",
-    price: 145,
+      "Andador ergonómico resistente para apoyo y desplazamiento seguro. Ideal para adultos mayores y pacientes en rehabilitación.",
+    price: 0,
     featured: true,
-    image: "/images/products/andador.jpg",
+    image: "/ANDADOR.jpg",
   },
   {
-    id: 3,
-    name: "Bastón Regulable",
-    category: "Movilidad",
-    subcategory: "Bastones",
-    description:
-      "Bastón de aluminio con altura regulable y empuñadura anatómica antideslizante.",
-    price: 35,
-    featured: true,
-    image: "/images/products/baston.jpg",
-  },
-  {
-    id: 4,
-    name: "Muletas Axilares",
-    category: "Movilidad",
-    subcategory: "Muletas",
-    description:
-      "Par de muletas axilares regulables con almohadillas ergonómicas de alta densidad.",
-    price: 55,
-    featured: true,
-    image: "/images/products/muletas.jpg",
-  },
-  // Rehabilitación
-  {
-    id: 5,
-    name: "Set Bandas Elásticas",
+    id: 2,
+    name: "Banda de Resistencia x3",
     category: "Rehabilitación",
     subcategory: "Bandas elásticas",
     description:
-      "Set de 5 bandas de resistencia progresiva para fisioterapia y rehabilitación muscular.",
-    price: 28,
+      "Set de 3 bandas de resistencia progresiva para fisioterapia y ejercicios de rehabilitación muscular.",
+    price: 0,
+    featured: true,
+    image: "/BANDA-DE-RESISTENCIA-X3.jpg",
+  },
+  {
+    id: 3,
+    name: "Bandas de Tela x3",
+    category: "Rehabilitación",
+    subcategory: "Bandas elásticas",
+    description:
+      "Set de 3 bandas de tela suaves y resistentes. Ideales para ejercicios de activación muscular y rehabilitación.",
+    price: 0,
     featured: false,
-    image: "/images/products/bandas.jpg",
+    image: "/BANDAS-DE-TELA-X3.jpg",
+  },
+  {
+    id: 4,
+    name: "Bandas Elásticas x5",
+    category: "Rehabilitación",
+    subcategory: "Bandas elásticas",
+    description:
+      "Set completo de 5 bandas elásticas con diferentes niveles de resistencia para rehabilitación progresiva.",
+    price: 0,
+    featured: true,
+    image: "/BANDAS-ELASTICA-X5.jpg",
+  },
+  {
+    id: 5,
+    name: "Bastón 4 Soportes",
+    category: "Movilidad",
+    subcategory: "Bastones",
+    description:
+      "Bastón con base de 4 puntos de apoyo para mayor estabilidad y seguridad al caminar.",
+    price: 0,
+    featured: true,
+    image: "/BASTON-4-SOPORTES.jpg",
   },
   {
     id: 6,
-    name: "Pesas Terapéuticas",
-    category: "Rehabilitación",
-    subcategory: "Pesas terapéuticas",
+    name: "Bastón en Uno",
+    category: "Movilidad",
+    subcategory: "Bastones",
     description:
-      "Set de pesas de muñeca y tobillo para rehabilitación progresiva. Desde 0.5 kg hasta 3 kg.",
-    price: 42,
+      "Bastón plegable multifuncional con altura regulable y empuñadura ergonómica antideslizante.",
+    price: 0,
     featured: false,
-    image: "/images/products/pesas.jpg",
+    image: "/BASTON-EN-UNO.jpg",
   },
   {
     id: 7,
-    name: "Rodillera de Soporte",
+    name: "Cabestrillo Andino",
     category: "Ortesis",
-    subcategory: "Rodilleras",
+    subcategory: "Inmovilizadores",
     description:
-      "Rodillera ortopédica con varillas laterales para estabilización y soporte articular.",
-    price: 38,
-    featured: true,
-    image: "/images/products/rodillera.jpg",
+      "Cabestrillo ortopédico para inmovilización y soporte del brazo durante la recuperación.",
+    price: 0,
+    featured: false,
+    image: "/CABESTRILLO-ANDINO.jpg",
   },
   {
     id: 8,
-    name: "Faja Lumbar Premium",
+    name: "Codera ORTOPEDIX",
     category: "Ortesis",
-    subcategory: "Fajas",
+    subcategory: "Coderas",
     description:
-      "Faja lumbar con soporte rígido ajustable. Ideal para dolor lumbar crónico y postoperatorio.",
-    price: 65,
-    featured: true,
-    image: "/images/products/faja.jpg",
+      "Codera ortopédica con soporte lateral reforzado para protección y estabilización del codo.",
+    price: 0,
+    featured: false,
+    image: "/CODERA-ORTOPEDIX.jpg",
   },
   {
     id: 9,
-    name: "Cama Hospitalaria Manual",
-    category: "Adulto Mayor",
-    subcategory: "Camas hospitalarias",
+    name: "Collar Cervical Blando",
+    category: "Ortesis",
+    subcategory: "Collarines",
     description:
-      "Cama hospitalaria de 3 posiciones con barandas de seguridad y colchón antiescaras incluido.",
-    price: 650,
-    featured: false,
-    image: "/images/products/cama.jpg",
+      "Collar cervical blando para soporte y alivio del dolor cervical. Diseño cómodo para uso prolongado.",
+    price: 0,
+    featured: true,
+    image: "/COLLAR-CERVICAL-BLANDO.jpg",
   },
   {
     id: 10,
-    name: "Silla Sanitaria con Ruedas",
-    category: "Adulto Mayor",
-    subcategory: "Sillas sanitarias",
+    name: "Compresa",
+    category: "Rehabilitación",
+    subcategory: "Terapia de calor",
     description:
-      "Silla de baño con ruedas, reposa brazos abatibles y asiento con apertura central.",
-    price: 95,
+      "Compresa terapéutica para aplicación de calor o frío. Alivia dolores musculares y articulares.",
+    price: 0,
     featured: false,
-    image: "/images/products/silla-sanitaria.jpg",
+    image: "/COMPRESA.jpg",
   },
   {
     id: 11,
-    name: "Cojín Antiescaras",
-    category: "Adulto Mayor",
-    subcategory: "Cojines antiescaras",
+    name: "Corrector de Postura Andino",
+    category: "Ortesis",
+    subcategory: "Correctores",
     description:
-      "Cojín de gel viscoelástico para prevención de úlceras por presión. Compatible con sillas de ruedas.",
-    price: 48,
-    featured: false,
-    image: "/images/products/cojin.jpg",
+      "Corrector postural que alinea los hombros y la columna para mejorar la postura en el día a día.",
+    price: 0,
+    featured: true,
+    image: "/CORRECTOR-DE-POSTURA-ANDINO.jpg",
   },
   {
     id: 12,
-    name: "Tobillera Ortopédica",
+    name: "Faja Postquirúrgica",
+    category: "Ortesis",
+    subcategory: "Fajas",
+    description:
+      "Faja de compresión postquirúrgica para recuperación abdominal. Soporte y contención graduable.",
+    price: 0,
+    featured: true,
+    image: "/FAJA-POSTQUIRURGICA.jpg",
+  },
+  {
+    id: 13,
+    name: "Hombrera",
+    category: "Ortesis",
+    subcategory: "Hombreras",
+    description:
+      "Hombrera ortopédica para soporte y estabilización del hombro durante la rehabilitación.",
+    price: 0,
+    featured: false,
+    image: "/HOMBRERA.jpg",
+  },
+  {
+    id: 14,
+    name: "Inmovilizador de Codo",
+    category: "Ortesis",
+    subcategory: "Inmovilizadores",
+    description:
+      "Inmovilizador rígido para codo, ideal para fracturas y postoperatorio. Ajuste ergonómico.",
+    price: 0,
+    featured: false,
+    image: "/INMOVILIZADOR-DE-CODO.jpg",
+  },
+  {
+    id: 15,
+    name: "Muletas",
+    category: "Movilidad",
+    subcategory: "Muletas",
+    description:
+      "Par de muletas axilares de aluminio con altura regulable y almohadillas ergonómicas de alta densidad.",
+    price: 0,
+    featured: true,
+    image: "/MULETAS.jpg",
+  },
+  {
+    id: 16,
+    name: "Rodillera Deportiva",
+    category: "Ortesis",
+    subcategory: "Rodilleras",
+    description:
+      "Rodillera deportiva de compresión para protección articular durante actividad física y deporte.",
+    price: 0,
+    featured: false,
+    image: "/RODILLERA-DEPORTIVA.jpg",
+  },
+  {
+    id: 17,
+    name: "Rodillera ORTOPEDIX",
+    category: "Ortesis",
+    subcategory: "Rodilleras",
+    description:
+      "Rodillera ortopédica con varillas laterales de estabilización para soporte articular clínico.",
+    price: 0,
+    featured: true,
+    image: "/RODILLERA-ORTOPEDIX.jpg",
+  },
+  {
+    id: 18,
+    name: "Soporte de Muñeca",
+    category: "Ortesis",
+    subcategory: "Muñequeras",
+    description:
+      "Soporte ortopédico para muñeca con férula interna. Ideal para tendinitis y síndrome del túnel carpiano.",
+    price: 0,
+    featured: false,
+    image: "/SOPORTE-DE-MUNECA.jpg",
+  },
+  {
+    id: 19,
+    name: "Tobillera en 8 ORTOPEDIX",
     category: "Ortesis",
     subcategory: "Tobilleras",
     description:
-      "Tobillera de estabilización con sistema de cordones y soporte lateral reforzado.",
-    price: 32,
-    featured: false,
-    image: "/images/products/tobillera.jpg",
+      "Tobillera en figura de 8 para estabilización y soporte del tobillo en esguinces y lesiones ligamentosas.",
+    price: 0,
+    featured: true,
+    image: "/TOBILLERA-EN-8-ORTOPEDIX.jpg",
   },
 ];
 
@@ -184,44 +259,37 @@ export const categories = [
     id: "movilidad",
     name: "Movilidad",
     description:
-      "Sillas de ruedas, andadores, bastones y muletas para mantener tu independencia y calidad de vida.",
+      "Andadores, bastones, muletas y más para mantener tu independencia y calidad de vida.",
     icon: "♿",
     color: "from-blue-500 to-blue-700",
-    subcategories: ["Sillas de ruedas", "Bastones", "Muletas", "Andadores"],
+    subcategories: ["Andadores", "Bastones", "Muletas"],
   },
   {
     id: "rehabilitacion",
     name: "Rehabilitación",
     description:
-      "Equipos y accesorios para tu proceso de recuperación física, supervisado por profesionales.",
+      "Bandas elásticas, compresas y equipos para tu proceso de recuperación física.",
     icon: "💪",
     color: "from-green-500 to-green-700",
-    subcategories: [
-      "Bandas elásticas",
-      "Equipos de fisioterapia",
-      "Pesas terapéuticas",
-    ],
+    subcategories: ["Bandas elásticas", "Terapia de calor"],
   },
   {
     id: "ortesis",
     name: "Ortesis",
     description:
-      "Rodilleras, tobilleras, muñequeras y fajas para soporte y estabilización articular.",
+      "Rodilleras, tobilleras, fajas, correctores y soportes para cada articulación.",
     icon: "🦵",
     color: "from-indigo-500 to-indigo-700",
-    subcategories: ["Rodilleras", "Tobilleras", "Muñequeras", "Fajas"],
-  },
-  {
-    id: "adulto-mayor",
-    name: "Adulto Mayor",
-    description:
-      "Soluciones especializadas para el cuidado y confort de adultos mayores en el hogar.",
-    icon: "🏡",
-    color: "from-teal-500 to-teal-700",
     subcategories: [
-      "Sillas sanitarias",
-      "Camas hospitalarias",
-      "Cojines antiescaras",
+      "Rodilleras",
+      "Tobilleras",
+      "Muñequeras",
+      "Fajas",
+      "Collarines",
+      "Coderas",
+      "Hombreras",
+      "Correctores",
+      "Inmovilizadores",
     ],
   },
 ];
@@ -233,7 +301,7 @@ export const testimonials = [
     age: 72,
     text: "Después de mi operación de cadera, ORTOPEDIX me ayudó a encontrar exactamente lo que necesitaba. El andador que me recomendaron cambió mi vida. El equipo es muy atento y paciente.",
     rating: 5,
-    product: "Andador con Ruedas",
+    product: "Andador",
   },
   {
     id: 2,
@@ -241,15 +309,15 @@ export const testimonials = [
     role: "Fisioterapeuta",
     text: "Trabajo con ORTOPEDIX para mis pacientes y siempre encuentro productos de calidad certificada. Su asesoría profesional es excelente y los precios son competitivos.",
     rating: 5,
-    product: "Equipos de Rehabilitación",
+    product: "Bandas de Rehabilitación",
   },
   {
     id: 3,
     name: "Carmen López",
     age: 58,
-    text: "Mi madre necesitaba una silla de ruedas y no sabíamos cuál elegir. El equipo de ORTOPEDIX nos guió perfectamente. La atención fue increíble, como si fueran de la familia.",
+    text: "Mi madre necesitaba un andador y no sabíamos cuál elegir. El equipo de ORTOPEDIX nos guió perfectamente. La atención fue increíble, como si fueran de la familia.",
     rating: 5,
-    product: "Silla de Ruedas Estándar",
+    product: "Andador",
   },
   {
     id: 4,
@@ -257,7 +325,7 @@ export const testimonials = [
     age: 45,
     text: "Me lesioné la rodilla y necesitaba una rodillera especializada. En ORTOPEDIX encontré exactamente lo que mi médico recomendó. Entrega rápida y producto de primera calidad.",
     rating: 5,
-    product: "Rodillera de Soporte",
+    product: "Rodillera ORTOPEDIX",
   },
 ];
 
