@@ -24,20 +24,18 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  if (!product) return null;
-
   // Obtener tamaño natural de la imagen
   useEffect(() => {
-    if (product.image) {
-      const img = new Image();
-      img.onload = () => {
-        setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
-      };
-      img.src = product.image;
-    }
+    if (!product?.image) return;
+    
+    const img = new Image();
+    img.onload = () => {
+      setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+    img.src = product.image;
   }, [product]);
 
-  // Calcular tamaño de visualización (máximo 85% del contenedor)
+  // Calcular tamaño de visualización
   useEffect(() => {
     if (naturalSize.width > 0 && containerRef.current) {
       const containerWidth = containerRef.current.clientWidth;
@@ -55,7 +53,9 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
         height: naturalSize.height * fitRatio,
       });
     }
-  }, [naturalSize, containerRef]);
+  }, [naturalSize]);
+
+  if (!product) return null;
 
   const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
     `Hola, me interesa el producto: *${product.name}* de ORTOPEDIX. ¿Podría darme más información?`
