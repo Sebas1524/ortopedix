@@ -13,18 +13,24 @@ export default function ProductosPage() {
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [showFilters, setShowFilters] = useState(true);
   const lastScrollY = useRef(0);
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
 
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY;
+      const difference = currentScrollY - lastScrollY.current;
       
-      if (currentScrollY > lastScrollY.current && currentScrollY > 300) {
-        setShowFilters(false);
-      } else if (currentScrollY < lastScrollY.current) {
-        setShowFilters(true);
+      // Solo cambiar si el scroll es significativo (evita temblor)
+      if (Math.abs(difference) > 5) {
+        if (currentScrollY > lastScrollY.current && currentScrollY > 300) {
+          setShowFilters(false);
+          setScrollDirection("down");
+        } else if (currentScrollY < lastScrollY.current) {
+          setShowFilters(true);
+          setScrollDirection("up");
+        }
+        lastScrollY.current = currentScrollY;
       }
-      
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -74,15 +80,11 @@ export default function ProductosPage() {
         </div>
       </section>
 
-      {/* Filters - EN EL FLUJO NORMAL, NO FIXED */}
-      <motion.section
-        animate={{ 
-          height: showFilters ? "auto" : 0,
-          opacity: showFilters ? 1 : 0,
-          marginBottom: showFilters ? 0 : 0,
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="bg-[#F5F7FA] overflow-hidden"
+      {/* Filters - Colapso estable sin temblor */}
+      <div
+        className={`bg-[#F5F7FA] overflow-hidden transition-all duration-300 ease-in-out ${
+          showFilters ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
         <div className="py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -123,7 +125,7 @@ export default function ProductosPage() {
             </div>
           </div>
         </div>
-      </motion.section>
+      </div>
 
       {/* Products grid */}
       <section className="bg-[#F5F7FA] pb-24 pt-4">
