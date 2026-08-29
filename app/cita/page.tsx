@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { siteConfig } from "@/lib/config";
+import { supabase } from "@/lib/supabase";
 
 const timeSlots = [
   "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
@@ -32,6 +34,11 @@ const MONTHS_ES = [
 ];
 const DAYS_ES = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 
+interface ReservedSlot {
+  fecha: string;
+  hora: string;
+}
+
 export default function CitaPage() {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -40,6 +47,33 @@ export default function CitaPage() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [form, setForm] = useState({ nombre: "", telefono: "", email: "", motivo: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [reservedSlots, setReservedSlots] = useState<ReservedSlot[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Cargar citas reservadas desde Supabase
+  useEffect(() => {
+    loadReservedSlots();
+  }, []);
+
+  const loadReservedSlots = async () => {
+    setLoadingSlots(true);
+    try {
+      const { data, error } = await supabase
+        .from("citas")
+        .select("fecha, hora");
+      
+      if (error) {
+        console.error("Error cargando citas:", error);
+      } else if (data) {
+        setReservedSlots(data as ReservedSlot[]);
+      }
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth);
   const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
@@ -56,15 +90,75 @@ export default function CitaPage() {
   const selectDay = (day: number) => {
     const d = new Date(viewYear, viewMonth, day);
     if (d < new Date(today.getFullYear(), today.getMonth(), today.getDate())) return;
-    if (d.getDay() === 0) return; // No domingo
+    if (d.getDay() === 0) return;
     setSelectedDate(`${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`);
     setSelectedTime(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const isSlotReserved = (date: string, time: string) => {
+    return reservedSlots.some((slot) => slot.fecha === date && slot.hora === time);
+  };
+
+  const getAvailableSlotsCount = (date: string) => {
+    return timeSlots.filter((t) => !isSlotReserved(date, t)).length;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDate || !selectedTime || !form.nombre || !form.telefono || !form.motivo) return;
-    setSubmitted(true);
+
+    if (isSlotReserved(selectedDate, selectedTime)) {
+      alert("Este horario ya fue reservado. Por favor selecciona otro.");
+      setSelectedTime(null);
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      // Insertar en Supabase
+      const { error } = await supabase
+        .from("citas")
+        .insert([
+          {
+            fecha: selectedDate,
+            hora: selectedTime,
+            nombre: form.nombre,
+            telefono: form.telefono,
+            email: form.email || null,
+            motivo: form.motivo,
+          },
+        ]);
+
+      if (error) {
+        console.error("Error guardando cita:", error);
+        alert("Hubo un error al guardar la cita. Intenta de nuevo.");
+        return;
+      }
+
+      // Recargar slots reservados
+      await loadReservedSlots();
+
+      // Enviar a WhatsApp
+      const waMessage = `🌐 *NUEVA CITA AGENDADA - ORTOPEDIX* 🌐\n\n` +
+        `📅 *Fecha:* ${selectedDate}\n` +
+        `⏰ *Hora:* ${selectedTime}\n\n` +
+        `👤 *Nombre:* ${form.nombre}\n` +
+        `📞 *Teléfono:* ${form.telefono}\n` +
+        (form.email ? `📧 *Email:* ${form.email}\n` : "") +
+        `📋 *Motivo:* ${form.motivo}\n\n` +
+        `✅ Cita registrada desde la página web`;
+
+      const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(waMessage)}`;
+      window.open(waUrl, "_blank");
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Hubo un error. Intenta de nuevo.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const isPast = (day: number) => {
@@ -169,21 +263,30 @@ export default function CitaPage() {
                       const sun = isSunday(day);
                       const sel = isSelected(day);
                       const disabled = past || sun;
+                      const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                      const availableCount = getAvailableSlotsCount(dateStr);
+                      const fullyBooked = availableCount === 0;
+                      
                       return (
                         <button
                           key={day}
                           type="button"
-                          disabled={disabled}
+                          disabled={disabled || fullyBooked}
                           onClick={() => selectDay(day)}
-                          className={`w-full aspect-square rounded-xl text-sm font-semibold transition-all ${
+                          className={`relative w-full aspect-square rounded-xl text-sm font-semibold transition-all ${
                             sel
                               ? "bg-[#0D5BD7] text-white shadow-md"
                               : disabled
                               ? "text-gray-200 cursor-not-allowed"
+                              : fullyBooked
+                              ? "text-gray-300 cursor-not-allowed bg-gray-50 line-through"
                               : "text-gray-700 hover:bg-blue-50 hover:text-[#0D5BD7]"
                           }`}
                         >
                           {day}
+                          {!disabled && !fullyBooked && availableCount < timeSlots.length && (
+                            <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[#6ABF4B] rounded-full" />
+                          )}
                         </button>
                       );
                     })}
@@ -195,22 +298,36 @@ export default function CitaPage() {
                       <h3 className="text-base font-bold text-gray-700 mb-3 flex items-center gap-2">
                         <Clock size={18} className="text-[#0D5BD7]" /> Horario disponible
                       </h3>
-                      <div className="grid grid-cols-4 gap-2">
-                        {timeSlots.map((t) => (
-                          <button
-                            key={t}
-                            type="button"
-                            onClick={() => setSelectedTime(t)}
-                            className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                              selectedTime === t
-                                ? "bg-[#6ABF4B] text-white shadow-sm"
-                                : "bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-[#0D5BD7] border border-gray-100"
-                            }`}
-                          >
-                            {t}
-                          </button>
-                        ))}
-                      </div>
+                      {loadingSlots ? (
+                        <p className="text-sm text-gray-400 italic">Cargando horarios...</p>
+                      ) : getAvailableSlotsCount(selectedDate) === 0 ? (
+                        <p className="text-sm text-gray-400 italic">
+                          No hay horarios disponibles para esta fecha.
+                        </p>
+                      ) : (
+                        <div className="grid grid-cols-4 gap-2">
+                          {timeSlots.map((t) => {
+                            const reserved = isSlotReserved(selectedDate, t);
+                            return (
+                              <button
+                                key={t}
+                                type="button"
+                                disabled={reserved}
+                                onClick={() => setSelectedTime(t)}
+                                className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                                  reserved
+                                    ? "bg-gray-100 text-gray-300 cursor-not-allowed line-through"
+                                    : selectedTime === t
+                                    ? "bg-[#6ABF4B] text-white shadow-sm"
+                                    : "bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-[#0D5BD7] border border-gray-100"
+                                }`}
+                              >
+                                {t}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </div>
@@ -299,10 +416,10 @@ export default function CitaPage() {
 
                     <button
                       type="submit"
+                      disabled={!selectedDate || !selectedTime || !form.nombre || !form.telefono || !form.motivo || saving}
                       className="mt-auto w-full bg-[#0D5BD7] hover:bg-[#083B8A] text-white py-5 rounded-2xl font-black text-xl transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed min-h-[68px]"
-                      disabled={!selectedDate || !selectedTime || !form.nombre || !form.telefono || !form.motivo}
                     >
-                      Agendar Cita
+                      {saving ? "Guardando..." : "Agendar Cita"}
                     </button>
                     <p className="text-gray-400 text-xs text-center">
                       * Te contactaremos para confirmar disponibilidad
