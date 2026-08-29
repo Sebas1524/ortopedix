@@ -3,21 +3,32 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, PersonStanding, Activity, Bone } from "lucide-react";
 import { categories, products } from "@/lib/config";
+
+// Mapeo de iconos por categoría
+const categoryIcons: Record<string, any> = {
+  Movilidad: PersonStanding,
+  Rehabilitación: Activity,
+  Ortesis: Bone,
+};
+
+// Mapeo de imágenes por categoría
+const categoryImages: Record<string, string> = {
+  Movilidad: "/categoria-movilidad.jpg",
+  Rehabilitación: "/categoria-rehabilitacion.jpg",
+  Ortesis: "/categoria-ortesis.jpg",
+};
 
 export default function CategoriasPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtrar categorías por búsqueda
   const filteredCategories = categories.filter((cat) => {
     if (!searchTerm) return true;
-    
     const matchCategory = cat.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchSubcategories = cat.subcategories.some((sub) =>
       sub.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
     return matchCategory || matchSubcategories;
   });
 
@@ -80,6 +91,8 @@ export default function CategoriasPage() {
                 const catProducts = products.filter((p) => p.category === cat.name);
                 const previewProducts = catProducts.slice(0, 4);
                 const count = catProducts.length;
+                const IconComponent = categoryIcons[cat.name] || Activity;
+                const categoryImage = categoryImages[cat.name] || "";
                 
                 return (
                   <motion.div
@@ -90,31 +103,48 @@ export default function CategoriasPage() {
                     transition={{ delay: i * 0.1, duration: 0.5 }}
                     className="group rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
                   >
-                    {/* Header gradient */}
-                    <div className={`bg-gradient-to-br ${cat.color} p-8 flex items-start justify-between relative overflow-hidden`}>
+                    {/* Header con IMAGEN DE FONDO */}
+                    <div className="relative h-56 overflow-hidden">
+                      {/* Imagen de fondo */}
+                      <img
+                        src={categoryImage}
+                        alt={cat.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      
+                      {/* Overlay con gradiente del color de la categoría */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-70 group-hover:opacity-60 transition-opacity duration-300`} />
+                      
                       {/* Círculo decorativo */}
                       <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
                       
-                      <div className="relative z-10">
-                        <motion.div 
-                          className="text-5xl mb-4 inline-block"
-                          whileHover={{ scale: 1.2, rotate: 10 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          {cat.icon}
-                        </motion.div>
-                        <h2 className="text-2xl lg:text-3xl font-black text-white mb-2">{cat.name}</h2>
-                        <p className="text-white/80 text-sm leading-relaxed max-w-xs">
-                          {cat.description}
-                        </p>
-                      </div>
-                      <div className="text-right relative z-10">
-                        <div className="text-4xl font-black text-white/30">{count}</div>
-                        <div className="text-white/50 text-sm">productos</div>
+                      {/* Contenido del header */}
+                      <div className="absolute inset-0 p-8 flex items-start justify-between">
+                        <div>
+                          <motion.div 
+                            className="mb-4 inline-block"
+                            whileHover={{ scale: 1.2, rotate: 10 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
+                            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                              <IconComponent size={28} className="text-white" />
+                            </div>
+                          </motion.div>
+                          <h2 className="text-2xl lg:text-3xl font-black text-white mb-2 drop-shadow-lg">
+                            {cat.name}
+                          </h2>
+                          <p className="text-white/90 text-sm leading-relaxed max-w-xs drop-shadow-md">
+                            {cat.description}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-4xl font-black text-white/40">{count}</div>
+                          <div className="text-white/70 text-sm">productos</div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Subcategories clickeables */}
+                    {/* Subcategories + Products + CTA */}
                     <div className="bg-white p-6 flex-1">
                       <div className="flex flex-wrap gap-2 mb-5">
                         {cat.subcategories.map((sub) => (
@@ -155,7 +185,6 @@ export default function CategoriasPage() {
                         </div>
                       )}
 
-                      {/* CTA */}
                       <Link
                         href={`/productos?categoria=${encodeURIComponent(cat.name)}`}
                         className="inline-flex items-center gap-2 text-[#0D5BD7] font-bold text-base group-hover:gap-3 transition-all mt-auto"
