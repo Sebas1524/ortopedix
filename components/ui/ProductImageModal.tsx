@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/config";
 interface ProductImageModalProps {
   product: {
     name: string;
-    image: string;
+    image?: string;
     description?: string;
   } | null;
   onClose: () => void;
@@ -88,7 +88,9 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
           <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-b border-white/10">
             <div>
               <h3 className="text-white font-bold text-lg">{product.name}</h3>
-              <p className="text-white/50 text-xs">Click y arrastra para mover · Rueda del mouse para zoom</p>
+              <p className="text-white/50 text-xs">
+                Click y arrastra para mover · Rueda del mouse para zoom
+              </p>
             </div>
             <button
               onClick={onClose}
@@ -108,19 +110,25 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
             onMouseLeave={handleMouseUp}
             onWheel={handleWheel}
           >
-            <motion.img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-contain select-none"
-              style={{
-                scale: zoom,
-                x: position.x,
-                y: position.y,
-                transition: isDragging ? "none" : "all 0.2s ease-out",
-              }}
-              drag={zoom === 1 ? false : true}
-              dragConstraints={{ left: -500, right: 500, top: -500, bottom: 500 }}
-            />
+            {product.image ? (
+              <motion.img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-contain select-none"
+                style={{
+                  scale: zoom,
+                  x: position.x,
+                  y: position.y,
+                  transition: isDragging ? "none" : "all 0.2s ease-out",
+                }}
+                drag={zoom === 1 ? false : true}
+                dragConstraints={{ left: -500, right: 500, top: -500, bottom: 500 }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white/50 text-xl">
+                Imagen no disponible
+              </div>
+            )}
           </div>
 
           {/* Barra inferior */}
