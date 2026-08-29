@@ -12,22 +12,15 @@ export default function ProductosPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [showFilters, setShowFilters] = useState(true);
-  const [isAtTop, setIsAtTop] = useState(true);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Detectar si estamos arriba de la página
-      setIsAtTop(currentScrollY < 100);
-      
-      // Si bajamos más de 200px, ocultar filtros
-      if (currentScrollY > lastScrollY.current && currentScrollY > 200) {
+      if (currentScrollY > lastScrollY.current && currentScrollY > 300) {
         setShowFilters(false);
-      } 
-      // Si subimos, mostrar filtros
-      else if (currentScrollY < lastScrollY.current) {
+      } else if (currentScrollY < lastScrollY.current) {
         setShowFilters(true);
       }
       
@@ -81,58 +74,59 @@ export default function ProductosPage() {
         </div>
       </section>
 
-      {/* Filters con animación de ocultar/mostrar */}
+      {/* Filters - EN EL FLUJO NORMAL, NO FIXED */}
       <motion.section
-        initial={{ opacity: 1, y: 0 }}
         animate={{ 
+          height: showFilters ? "auto" : 0,
           opacity: showFilters ? 1 : 0,
-          y: showFilters ? 0 : -100,
-          pointerEvents: showFilters ? "auto" : "none",
+          marginBottom: showFilters ? 0 : 0,
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={`bg-[#F5F7FA] py-8 fixed top-20 left-0 right-0 z-30 shadow-sm`}
+        className="bg-[#F5F7FA] overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-            {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#0D5BD7] text-base"
-              />
-            </div>
+        <div className="py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+              {/* Search */}
+              <div className="relative flex-1 max-w-md">
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Buscar productos..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-[#0D5BD7] text-base"
+                />
+              </div>
 
-            {/* Category tabs */}
-            <div className="flex gap-2 flex-wrap">
-              {allCategories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    activeCategory === cat
-                      ? "bg-[#0D5BD7] text-white shadow-md"
-                      : "bg-white text-gray-600 hover:bg-blue-50 border border-gray-200"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+              {/* Category tabs */}
+              <div className="flex gap-2 flex-wrap">
+                {allCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                      activeCategory === cat
+                        ? "bg-[#0D5BD7] text-white shadow-md"
+                        : "bg-white text-gray-600 hover:bg-blue-50 border border-gray-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
 
-            <div className="flex items-center gap-2 text-gray-400 text-sm shrink-0">
-              <SlidersHorizontal size={16} />
-              {filtered.length} productos
+              <div className="flex items-center gap-2 text-gray-400 text-sm shrink-0">
+                <SlidersHorizontal size={16} />
+                {filtered.length} productos
+              </div>
             </div>
           </div>
         </div>
       </motion.section>
 
       {/* Products grid */}
-      <section className={`bg-[#F5F7FA] pb-24 transition-all duration-300 ${showFilters ? "pt-24" : "pt-16"}`}>
+      <section className="bg-[#F5F7FA] pb-24 pt-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <div className="text-center py-24">
