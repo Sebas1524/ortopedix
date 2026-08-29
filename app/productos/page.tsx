@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Search, SlidersHorizontal } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
@@ -11,6 +11,32 @@ const allCategories = ["Todos", ...categories.map((c) => c.name)];
 export default function ProductosPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
+  const [showFilters, setShowFilters] = useState(true);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Detectar si estamos arriba de la página
+      setIsAtTop(currentScrollY < 100);
+      
+      // Si bajamos más de 200px, ocultar filtros
+      if (currentScrollY > lastScrollY.current && currentScrollY > 200) {
+        setShowFilters(false);
+      } 
+      // Si subimos, mostrar filtros
+      else if (currentScrollY < lastScrollY.current) {
+        setShowFilters(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const filtered = products.filter((p) => {
     const matchCat = activeCategory === "Todos" || p.category === activeCategory;
@@ -55,8 +81,17 @@ export default function ProductosPage() {
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="bg-[#F5F7FA] py-8 sticky top-20 z-30 shadow-sm">
+      {/* Filters con animación de ocultar/mostrar */}
+      <motion.section
+        initial={{ opacity: 1, y: 0 }}
+        animate={{ 
+          opacity: showFilters ? 1 : 0,
+          y: showFilters ? 0 : -100,
+          pointerEvents: showFilters ? "auto" : "none",
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`bg-[#F5F7FA] py-8 fixed top-20 left-0 right-0 z-30 shadow-sm`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
             {/* Search */}
@@ -94,10 +129,10 @@ export default function ProductosPage() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Products grid */}
-      <section className="bg-[#F5F7FA] pb-24 pt-8">
+      <section className={`bg-[#F5F7FA] pb-24 transition-all duration-300 ${showFilters ? "pt-24" : "pt-16"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <div className="text-center py-24">
