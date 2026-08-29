@@ -283,6 +283,91 @@ export const products = [
     featured: false,
     image: "/BANDA-DE-RESISTENCIA-X3.jpg",
   },
+  // ===== NUEVOS PRODUCTOS =====
+  {
+    id: 21,
+    name: "Cuello Filadelfia",
+    category: "Ortesis",
+    subcategory: "Collarines",
+    description:
+      "Collar cervical rígido tipo Filadelfia para inmovilización cervical en lesiones y postoperatorios.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/CUELLO-FILADELFIA.jpg",
+  },
+  {
+    id: 22,
+    name: "Prótesis de Mama",
+    category: "Ortesis",
+    subcategory: "Prótesis",
+    description:
+      "Prótesis de mama externa para uso post-mastectomía. Diseño natural y cómodo para uso diario.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/PROTESIS-DE-MAMA.jpg",
+  },
+  {
+    id: 23,
+    name: "Manillar para Muleta",
+    category: "Movilidad",
+    subcategory: "Accesorios",
+    description:
+      "Agarre ergonómico de repuesto para muletas. Proporciona mayor comodidad y soporte durante el uso.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/MANILLAR-PARA-MULETA.jpg",
+  },
+  {
+    id: 24,
+    name: "Faja Inguinal",
+    category: "Ortesis",
+    subcategory: "Fajas",
+    description:
+      "Faja inguinal de compresión para soporte y recuperación de lesiones en la zona de la ingle.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/FAJA-INGUINAL.jpg",
+  },
+  {
+    id: 25,
+    name: "Muslera",
+    category: "Ortesis",
+    subcategory: "Musleras",
+    description:
+      "Soporte ortopédico para muslo con compresión graduada. Ideal para lesiones musculares y recuperación.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/MUSLERA.jpg",
+  },
+  {
+    id: 26,
+    name: "Banda Rotuliana",
+    category: "Ortesis",
+    subcategory: "Rodilleras",
+    description:
+      "Banda rotuliana de soporte para aliviar el dolor de rodilla y estabilizar la rótula durante la actividad.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/BANDA-ROTULIANA.jpg",
+  },
+  {
+    id: 27,
+    name: "Pantorrillera",
+    category: "Ortesis",
+    subcategory: "Pantorrilleras",
+    description:
+      "Soporte de compresión para pantorrilla. Ayuda en la recuperación de desgarros y lesiones musculares.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/PANTORRILLERA.jpg",
+  },
 ];
 
 export const categories = [
@@ -293,7 +378,7 @@ export const categories = [
       "Andadores, bastones, muletas y más para mantener tu independencia y calidad de vida.",
     icon: "♿",
     color: "from-blue-500 to-blue-700",
-    subcategories: ["Andadores", "Bastones", "Muletas"],
+    subcategories: ["Andadores", "Bastones", "Muletas", "Accesorios"],
   },
   {
     id: "rehabilitacion",
@@ -321,6 +406,9 @@ export const categories = [
       "Hombreras",
       "Correctores",
       "Inmovilizadores",
+      "Prótesis",
+      "Musleras",
+      "Pantorrilleras",
     ],
   },
 ];
