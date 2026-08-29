@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ZoomIn, ZoomOut, MessageCircle } from "lucide-react";
 import { siteConfig } from "@/lib/config";
@@ -19,20 +19,55 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [naturalSize, setNaturalSize] = useState({ width: 0, height: 0 });
+  const [displaySize, setDisplaySize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   if (!product) return null;
+
+  // Obtener tamaño natural de la imagen
+  useEffect(() => {
+    if (product.image) {
+      const img = new Image();
+      img.onload = () => {
+        setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
+      };
+      img.src = product.image;
+    }
+  }, [product]);
+
+  // Calcular tamaño de visualización (máximo 85% del contenedor)
+  useEffect(() => {
+    if (naturalSize.width > 0 && containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const containerHeight = containerRef.current.clientHeight;
+      
+      const maxWidth = containerWidth * 0.85;
+      const maxHeight = containerHeight * 0.85;
+      
+      const widthRatio = maxWidth / naturalSize.width;
+      const heightRatio = maxHeight / naturalSize.height;
+      const fitRatio = Math.min(widthRatio, heightRatio, 1);
+      
+      setDisplaySize({
+        width: naturalSize.width * fitRatio,
+        height: naturalSize.height * fitRatio,
+      });
+    }
+  }, [naturalSize, containerRef]);
 
   const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
     `Hola, me interesa el producto: *${product.name}* de ORTOPEDIX. ¿Podría darme más información?`
   )}`;
 
   const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 0.5, 4));
+    setZoom((prev) => Math.min(prev + 0.25, 4));
   };
 
   const handleZoomOut = () => {
     setZoom((prev) => {
-      const newZoom = Math.max(prev - 0.5, 1);
+      const newZoom = Math.max(prev - 0.25, 1);
       if (newZoom === 1) setPosition({ x: 0, y: 0 });
       return newZoom;
     });
@@ -75,7 +110,6 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
         className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={onClose}
       >
-        {/* Contenido */}
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -85,7 +119,7 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
           onClick={(e) => e.stopPropagation()}
         >
           {/* Barra superior */}
-          <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-b border-white/10">
+          <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-b border-white/10 shrink-0">
             <div>
               <h3 className="text-white font-bold text-lg">{product.name}</h3>
               <p className="text-white/50 text-xs">
@@ -101,9 +135,10 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
             </button>
           </div>
 
-          {/* Área de imagen con zoom */}
+          {/* Área de imagen */}
           <div
-            className="relative flex-1 overflow-hidden cursor-grab active:cursor-grabbing"
+            ref={containerRef}
+            className="relative flex-1 overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -111,19 +146,27 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
             onWheel={handleWheel}
           >
             {product.image ? (
-              <motion.img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-contain select-none"
+              <motion.div
                 style={{
+                  width: displaySize.width || "auto",
+                  height: displaySize.height || "auto",
                   scale: zoom,
                   x: position.x,
                   y: position.y,
                   transition: isDragging ? "none" : "all 0.2s ease-out",
                 }}
                 drag={zoom === 1 ? false : true}
-                dragConstraints={{ left: -500, right: 500, top: -500, bottom: 500 }}
-              />
+                dragConstraints={{ left: -800, right: 800, top: -800, bottom: 800 }}
+                className="flex items-center justify-center"
+              >
+                <img
+                  ref={imageRef}
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-contain select-none"
+                  draggable={false}
+                />
+              </motion.div>
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white/50 text-xl">
                 Imagen no disponible
@@ -132,8 +175,7 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
           </div>
 
           {/* Barra inferior */}
-          <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-t border-white/10">
-            {/* Controles de zoom */}
+          <div className="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm border-t border-white/10 shrink-0">
             <div className="flex items-center gap-2">
               <button
                 onClick={handleZoomOut}
@@ -165,7 +207,6 @@ export default function ProductImageModal({ product, onClose }: ProductImageModa
               </button>
             </div>
 
-            {/* Botón WhatsApp */}
             <a
               href={waUrl}
               target="_blank"
