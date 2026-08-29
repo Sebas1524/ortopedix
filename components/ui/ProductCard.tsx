@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle, Tag } from "lucide-react";
+import { MessageCircle, Tag, ZoomIn } from "lucide-react";
 import { siteConfig } from "@/lib/config";
+import ProductImageModal from "@/components/ui/ProductImageModal";
 
 interface Product {
   id: number;
@@ -14,10 +16,12 @@ interface Product {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+  const [showModal, setShowModal] = useState(false);
+
   const waMessage = `Hola, me interesa el producto: *${product.name}* de ORTOPEDIX. ¿Podría darme más información?`;
   const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(waMessage)}`;
 
-  // Color placeholder por categoría (solo se usa si no hay imagen)
+  // Color placeholder por categoría
   const categoryColors: Record<string, string> = {
     Movilidad: "from-blue-400 to-blue-600",
     Rehabilitación: "from-green-400 to-green-600",
@@ -27,64 +31,80 @@ export default function ProductCard({ product }: { product: Product }) {
   const gradient = categoryColors[product.category] || "from-blue-400 to-blue-600";
 
   return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
-    >
-      {/* Imagen real o placeholder */}
-      <div className="relative h-52 overflow-hidden bg-gray-100">
-        {product.image ? (
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          // Placeholder solo si no hay imagen
-          <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-            <div className="text-white/20 text-8xl font-black select-none">
-              {product.name.charAt(0)}
+    <>
+      <motion.div
+        whileHover={{ y: -6 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
+      >
+        {/* Imagen clickeable */}
+        <div
+          className="relative h-52 overflow-hidden bg-gray-100 cursor-pointer group"
+          onClick={() => setShowModal(true)}
+        >
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+              <div className="text-white/20 text-8xl font-black select-none">
+                {product.name.charAt(0)}
+              </div>
+            </div>
+          )}
+          {/* Badge de categoría */}
+          <div className="absolute top-3 left-3">
+            <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
+              {product.category}
+            </span>
+          </div>
+          {/* Icono de zoom al hacer hover */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 backdrop-blur-sm rounded-full p-3">
+              <ZoomIn size={24} className="text-white" />
             </div>
           </div>
-        )}
-        {/* Badge de categoría */}
-        <div className="absolute top-3 left-3">
-          <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-            {product.category}
-          </span>
         </div>
-      </div>
 
-      {/* Contenido */}
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-bold text-gray-800 text-lg leading-tight mb-2">
-          {product.name}
-        </h3>
-        <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-4">
-          {product.description}
-        </p>
+        {/* Contenido */}
+        <div className="p-5 flex flex-col flex-1">
+          <h3 className="font-bold text-gray-800 text-lg leading-tight mb-2">
+            {product.name}
+          </h3>
+          <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-4">
+            {product.description}
+          </p>
 
-        <div className="flex items-center justify-between mt-auto">
-          {siteConfig.showPrices && product.price ? (
-            <div className="flex items-center gap-1.5 text-[#0D5BD7]">
-              <Tag size={16} />
-              <span className="font-bold text-xl">${product.price.toFixed(2)}</span>
-            </div>
-          ) : (
-            <span className="text-gray-400 text-sm italic">Consultar precio</span>
-          )}
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-[#6ABF4B] hover:bg-[#4a9932] text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all hover:shadow-md"
-          >
-            <MessageCircle size={16} />
-            WhatsApp
-          </a>
+          <div className="flex items-center justify-between mt-auto">
+            {siteConfig.showPrices && product.price ? (
+              <div className="flex items-center gap-1.5 text-[#0D5BD7]">
+                <Tag size={16} />
+                <span className="font-bold text-xl">${product.price.toFixed(2)}</span>
+              </div>
+            ) : (
+              <span className="text-gray-400 text-sm italic">Consultar precio</span>
+            )}
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-[#6ABF4B] hover:bg-[#4a9932] text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all hover:shadow-md"
+            >
+              <MessageCircle size={16} />
+              WhatsApp
+            </a>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Modal de imagen ampliada */}
+      <ProductImageModal
+        product={showModal ? product : null}
+        onClose={() => setShowModal(false)}
+      />
+    </>
   );
 }
