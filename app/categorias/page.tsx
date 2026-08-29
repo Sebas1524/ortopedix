@@ -3,15 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Search, PersonStanding, Activity, Bone } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { categories, products } from "@/lib/config";
-
-// Mapeo de iconos por categoría
-const categoryIcons: Record<string, any> = {
-  Movilidad: PersonStanding,
-  Rehabilitación: Activity,
-  Ortesis: Bone,
-};
 
 // Mapeo de imágenes por categoría
 const categoryImages: Record<string, string> = {
@@ -91,7 +84,6 @@ export default function CategoriasPage() {
                 const catProducts = products.filter((p) => p.category === cat.name);
                 const previewProducts = catProducts.slice(0, 4);
                 const count = catProducts.length;
-                const IconComponent = categoryIcons[cat.name] || Activity;
                 const categoryImage = categoryImages[cat.name] || "";
                 
                 return (
@@ -103,7 +95,7 @@ export default function CategoriasPage() {
                     transition={{ delay: i * 0.1, duration: 0.5 }}
                     className="group rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
                   >
-                    {/* Header con IMAGEN DE FONDO */}
+                    {/* Header con IMAGEN LIMPIA */}
                     <div className="relative h-56 overflow-hidden">
                       {/* Imagen de fondo */}
                       <img
@@ -112,24 +104,12 @@ export default function CategoriasPage() {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       
-                      {/* Overlay con gradiente del color de la categoría */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-70 group-hover:opacity-60 transition-opacity duration-300`} />
-                      
-                      {/* Círculo decorativo */}
-                      <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
+                      {/* Degradado sutil solo abajo para legibilidad */}
+                      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
                       
                       {/* Contenido del header */}
-                      <div className="absolute inset-0 p-8 flex items-start justify-between">
+                      <div className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between">
                         <div>
-                          <motion.div 
-                            className="mb-4 inline-block"
-                            whileHover={{ scale: 1.2, rotate: 10 }}
-                            transition={{ type: "spring", stiffness: 300 }}
-                          >
-                            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                              <IconComponent size={28} className="text-white" />
-                            </div>
-                          </motion.div>
                           <h2 className="text-2xl lg:text-3xl font-black text-white mb-2 drop-shadow-lg">
                             {cat.name}
                           </h2>
@@ -137,9 +117,9 @@ export default function CategoriasPage() {
                             {cat.description}
                           </p>
                         </div>
-                        <div className="text-right">
-                          <div className="text-4xl font-black text-white/40">{count}</div>
-                          <div className="text-white/70 text-sm">productos</div>
+                        <div className="text-right shrink-0 ml-4">
+                          <div className="text-3xl font-black text-white/70">{count}</div>
+                          <div className="text-white/60 text-xs">productos</div>
                         </div>
                       </div>
                     </div>
