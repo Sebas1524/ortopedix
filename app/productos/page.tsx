@@ -5,29 +5,53 @@ import { motion } from "framer-motion";
 import { Search, SlidersHorizontal } from "lucide-react";
 import ProductCard from "@/components/ui/ProductCard";
 import { products, categories } from "@/lib/config";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 const allCategories = ["Todos", ...categories.map((c) => c.name)];
 
-export default function ProductosPage() {
+function ProductosContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
+  const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(true);
   const lastScrollY = useRef(0);
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
 
+  // Leer parámetros de la URL al cargar
+  useEffect(() => {
+    const categoria = searchParams.get("categoria");
+    const subcategoria = searchParams.get("subcategoria");
+    const buscar = searchParams.get("buscar");
+    
+    if (categoria) {
+      // Convertir id a nombre
+      const cat = categories.find((c) => c.id === categoria.toLowerCase());
+      if (cat) setActiveCategory(cat.name);
+    }
+    
+    if (subcategoria) {
+      setActiveSubcategory(subcategoria);
+    }
+    
+    if (buscar) {
+      setSearch(buscar);
+    }
+  }, [searchParams]);
+
+  // Scroll behavior
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY;
       const difference = currentScrollY - lastScrollY.current;
       
-      // Solo cambiar si el scroll es significativo (evita temblor)
       if (Math.abs(difference) > 5) {
         if (currentScrollY > lastScrollY.current && currentScrollY > 300) {
           setShowFilters(false);
-          setScrollDirection("down");
         } else if (currentScrollY < lastScrollY.current) {
           setShowFilters(true);
-          setScrollDirection("up");
         }
         lastScrollY.current = currentScrollY;
       }
@@ -39,10 +63,12 @@ export default function ProductosPage() {
 
   const filtered = products.filter((p) => {
     const matchCat = activeCategory === "Todos" || p.category === activeCategory;
+    const matchSub = !activeSubcategory || p.subcategory === activeSubcategory;
     const matchSearch =
+      !search ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.description.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
+    return matchCat && matchSub && matchSearch;
   });
 
   return (
@@ -80,7 +106,7 @@ export default function ProductosPage() {
         </div>
       </section>
 
-      {/* Filters - Colapso estable sin temblor */}
+      {/* Filters */}
       <div
         className={`bg-[#F5F7FA] overflow-hidden transition-all duration-300 ease-in-out ${
           showFilters ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
@@ -106,7 +132,10 @@ export default function ProductosPage() {
                 {allCategories.map((cat) => (
                   <button
                     key={cat}
-                    onClick={() => setActiveCategory(cat)}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setActiveSubcategory(null);
+                    }}
                     className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                       activeCategory === cat
                         ? "bg-[#0D5BD7] text-white shadow-md"
@@ -117,6 +146,16 @@ export default function ProductosPage() {
                   </button>
                 ))}
               </div>
+
+              {/* Clear subcategory if active */}
+              {activeSubcategory && (
+                <button
+                  onClick={() => setActiveSubcategory(null)}
+                  className="text-sm text-[#0D5BD7] font-semibold bg-blue-50 rounded-full px-4 py-2 hover:bg-blue-100 transition-colors shrink-0"
+                >
+                  ✕ {activeSubcategory}
+                </button>
+              )}
 
               <div className="flex items-center gap-2 text-gray-400 text-sm shrink-0">
                 <SlidersHorizontal size={16} />
@@ -153,5 +192,14 @@ export default function ProductosPage() {
         </div>
       </section>
     </>
+  );
+}
+
+// Wrapper con Suspense para useSearchParams
+export default function ProductosPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 text-center text-gray-500">Cargando...</div>}>
+      <ProductosContent />
+    </Suspense>
   );
 }
