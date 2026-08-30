@@ -368,6 +368,42 @@ export const products = [
     featured: false,
     image: "/PANTORRILLERA.jpg",
   },
+    {
+    id: 28,
+    name: "Vitamina D",
+    category: "Rehabilitación",
+    subcategory: "Suplementos",
+    description:
+      "Suplemento de vitamina D para fortalecimiento óseo y apoyo al sistema inmunológico.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/VITAMINA-D.jpg",
+  },
+  {
+    id: 29,
+    name: "Zinc Plus",
+    category: "Rehabilitación",
+    subcategory: "Suplementos",
+    description:
+      "Suplemento de zinc para apoyo al sistema inmunológico y recuperación de tejidos.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/ZINC-PLUS.jpg",
+  },
+  {
+    id: 30,
+    name: "Omega 3",
+    category: "Rehabilitación",
+    subcategory: "Suplementos",
+    description:
+      "Suplemento de omega 3 con ácidos grasos esenciales para la salud cardiovascular y articular.",
+    price: 0,
+    sizes: null,
+    featured: false,
+    image: "/OMEGA-3.jpg",
+  },
 ];
 
 export const categories = [
