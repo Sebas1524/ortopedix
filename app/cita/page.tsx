@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Clock, User, Phone, Mail, FileText, CheckCircle, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 
@@ -193,6 +193,40 @@ export default function CitaPage() {
 
       <section className="bg-[#F5F7FA] py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* Notificación: En el teléfono es más fácil */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 bg-gradient-to-r from-[#6ABF4B] to-[#4a9932] rounded-2xl shadow-lg p-5 sm:p-6"
+          >
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                  <Phone size={26} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-white font-bold text-lg leading-tight">
+                    📱 ¿Estás en tu teléfono?
+                  </p>
+                  <p className="text-white/85 text-sm mt-1">
+                    Agenda tu cita por WhatsApp directamente desde tu teléfono. Es más rápido, ya tienes la app iniciada.
+                  </p>
+                </div>
+              </div>
+              <a
+                href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent("Hola, quiero agendar una cita en ORTOPEDIX.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-white text-[#4a9932] px-6 py-3 rounded-xl font-black hover:bg-gray-50 transition-all hover:shadow-lg shrink-0"
+              >
+                <MessageCircle size={20} />
+                Agendar por WhatsApp
+              </a>
+            </div>
+          </motion.div>
+
           <AnimatePresence mode="wait">
             {submitted ? (
               <motion.div
