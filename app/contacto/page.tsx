@@ -197,7 +197,7 @@ export default function ContactoPage() {
               {/* Map */}
               <div className="bg-white rounded-3xl overflow-hidden shadow-sm h-72">
                 <iframe
-                  src={siteConfig.mapUrl}
+                  src={siteConfig.mapEmbed}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
