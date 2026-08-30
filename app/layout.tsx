@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
+  icons: {
+    icon: "/ORTOPEDIX_logo.ico",
+    shortcut: "/ORTOPEDIX_logo.ico",
+    apple: "/ORTOPEDIX_logo.ico",
+  },
   openGraph: {
     type: "website",
     locale: "es_EC",
@@ -35,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <head>
+        <link rel="icon" href="/ORTOPEDIX_logo.ico" type="image/x-icon" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
