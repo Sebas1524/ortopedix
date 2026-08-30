@@ -368,7 +368,7 @@ export const products = [
     featured: false,
     image: "/PANTORRILLERA.jpg",
   },
-    {
+  {
     id: 28,
     name: "Vitamina D",
     category: "Rehabilitación",
@@ -420,10 +420,10 @@ export const categories = [
     id: "rehabilitacion",
     name: "Rehabilitación",
     description:
-      "Bandas elásticas, compresas y equipos para tu proceso de recuperación física.",
+      "Bandas elásticas, compresas, suplementos y equipos para tu proceso de recuperación física.",
     icon: "💪",
     color: "from-green-500 to-green-700",
-    subcategories: ["Bandas elásticas", "Terapia de calor"],
+    subcategories: ["Bandas elásticas", "Terapia de calor", "Suplementos"],
   },
   {
     id: "ortesis",
