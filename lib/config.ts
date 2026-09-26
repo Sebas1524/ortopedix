@@ -27,9 +27,7 @@ export const siteConfig = {
 
   // ---- REDES SOCIALES ----
   social: {
-    facebook: "https://facebook.com/ortopedix",
-    instagram: "https://instagram.com/ortopedix",
-    tiktok: "https://tiktok.com/@ortopedix",
+    tiktok: "https://www.tiktok.com/@ortopdics",
   },
 
   // ---- CATÁLOGO ----
