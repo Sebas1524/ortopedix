@@ -36,6 +36,7 @@ export const siteConfig = {
   showPrices: true, // Cambiar a true para mostrar precios
 
   // ---- SEO ----
+  
   siteUrl: "https://ortopedix.com",
   keywords:
     "ortopedia, productos ortopédicos, rehabilitación física, sillas de ruedas, muletas, andadores, adulto mayor, equipos médicos, fisioterapia, Quito",
@@ -57,7 +58,7 @@ export const products = [
   },
   {
     id: 2,
-    name: "Corrector de Postura Andino",
+    name: "Corrector de Postura Ortopedix",
     category: "Ortesis",
     subcategory: "Correctores",
     description:
@@ -81,7 +82,7 @@ export const products = [
   },
   {
     id: 4,
-    name: "Cabestrillo Andino",
+    name: "Cabestrillo Ortopedix",
     category: "Ortesis",
     subcategory: "Inmovilizadores",
     description:
