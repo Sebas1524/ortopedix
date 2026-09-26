@@ -25,22 +25,13 @@ export default function Footer() {
             {/* Social */}
             <div className="flex gap-3">
               <a
-                href={siteConfig.social.facebook}
+                href={siteConfig.social.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg bg-white/10 hover:bg-[#6ABF4B] flex items-center justify-center transition-colors"
-                aria-label="Facebook"
+                aria-label="TikTok"
               >
-                <span className="font-bold text-xs">FB</span>
-              </a>
-              <a
-                href={siteConfig.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-white/10 hover:bg-[#6ABF4B] flex items-center justify-center transition-colors"
-                aria-label="Instagram"
-              >
-                <span className="font-bold text-xs">IG</span>
+                <span className="font-bold text-xs">TT</span>
               </a>
             </div>
           </div>
