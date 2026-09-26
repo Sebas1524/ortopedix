@@ -31,10 +31,9 @@ export const siteConfig = {
   },
 
   // ---- CATÁLOGO ----
-  showPrices: true, // Cambiar a true para mostrar precios
+  showPrices: true,
 
   // ---- SEO ----
-  
   siteUrl: "https://ortopedix.com",
   keywords:
     "ortopedia, productos ortopédicos, rehabilitación física, sillas de ruedas, muletas, andadores, adulto mayor, equipos médicos, fisioterapia, Quito",
