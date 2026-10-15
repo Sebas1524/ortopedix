@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { siteConfig } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";

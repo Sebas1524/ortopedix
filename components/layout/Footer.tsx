@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 
