@@ -50,6 +50,7 @@ export default function CitaPage() {
   const [reservedSlots, setReservedSlots] = useState<ReservedSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [generatedWaUrl, setGeneratedWaUrl] = useState<string>("");
 
   useEffect(() => {
     loadReservedSlots();
@@ -146,12 +147,25 @@ export default function CitaPage() {
         `✅ Cita registrada desde la página web`;
 
       const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(waMessage)}`;
-      window.open(waUrl, "_blank");
-
+      setGeneratedWaUrl(waUrl);
       setSubmitted(true);
+
+      // Redirección directa para que no se bloquee como popup en móviles o navegadores
+      window.location.href = waUrl;
     } catch (err) {
       console.error("Error:", err);
-      alert("Hubo un error. Intenta de nuevo.");
+      const waMessage = `🌐 *NUEVA CITA AGENDADA - ORTOPEDIX* 🌐\n\n` +
+        `📅 *Fecha:* ${selectedDate}\n` +
+        `⏰ *Hora:* ${selectedTime}\n\n` +
+        `👤 *Nombre:* ${form.nombre}\n` +
+        `📞 *Teléfono:* ${form.telefono}\n` +
+        (form.email ? `📧 *Email:* ${form.email}\n` : "") +
+        `📋 *Motivo:* ${form.motivo}\n\n` +
+        `✅ Cita registrada desde la página web`;
+      const waUrl = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(waMessage)}`;
+      setGeneratedWaUrl(waUrl);
+      setSubmitted(true);
+      window.location.href = waUrl;
     } finally {
       setSaving(false);
     }
@@ -224,17 +238,28 @@ export default function CitaPage() {
                   <CheckCircle size={40} className="text-[#00B4D8]" />
                 </div>
                 <h2 className="text-3xl font-black text-[#004D5A] mb-4">¡Cita Registrada!</h2>
-                <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                  Su cita ha sido registrada exitosamente. Nos comunicaremos con usted para confirmar la disponibilidad.
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
+                  Su cita ha sido registrada con éxito. Se abrirá WhatsApp para que envíes la confirmación directa.
                 </p>
-                <div className="bg-[#F0FAFB] rounded-2xl p-5 text-left mb-8 space-y-2">
+                <div className="bg-[#F0FAFB] rounded-2xl p-5 text-left mb-6 space-y-2">
                   <div className="flex items-center gap-3 text-sm"><Calendar size={16} className="text-[#008C9E]" /><span className="font-semibold">{selectedDate}</span></div>
                   <div className="flex items-center gap-3 text-sm"><Clock size={16} className="text-[#008C9E]" /><span className="font-semibold">{selectedTime}</span></div>
                   <div className="flex items-center gap-3 text-sm"><User size={16} className="text-[#008C9E]" /><span className="font-semibold">{form.nombre}</span></div>
                 </div>
+
+                {generatedWaUrl && (
+                  <a
+                    href={generatedWaUrl}
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white py-4 px-6 rounded-2xl font-bold text-lg shadow-md hover:shadow-lg transition-all mb-4"
+                  >
+                    <MessageCircle size={22} />
+                    Enviar Cita por WhatsApp
+                  </a>
+                )}
+
                 <button
                   onClick={() => { setSubmitted(false); setSelectedDate(null); setSelectedTime(null); setForm({ nombre: "", telefono: "", email: "", motivo: "" }); }}
-                  className="bg-[#008C9E] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#004D5A] transition-colors"
+                  className="w-full bg-[#008C9E] text-white px-8 py-3.5 rounded-2xl font-bold text-base hover:bg-[#004D5A] transition-colors"
                 >
                   Agendar otra cita
                 </button>
